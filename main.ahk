@@ -61,9 +61,8 @@ buy_item() {
         Sleep(1000)
         if get_buy() {
             loop 20 {
-                Sleep(100)
+                Sleep(200)
                 MouseClick()
-                Sleep(100)
             }
         }   
         try {
