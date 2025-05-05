@@ -50,6 +50,7 @@ get_buy() {
     
     if value {
         MouseMove(foundx, foundy, 10)
+        MouseMove(foundx-2, foundy, 10)
     }
     return value
 }
