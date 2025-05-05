@@ -79,6 +79,17 @@ buy_item() {
     }
 }
 
+stopping_point() {
+    try {
+        ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/apple.png")
+        if outx {
+            return true
+        }
+    } catch as e {
+        return false
+    }
+}
+
 check_stock() {
     global funcran
     if check_menu() {
@@ -88,13 +99,17 @@ check_stock() {
         } catch as e {
             return
         }
-        Sleep(100)
+        Sleep(10)
         Send "{WheelDown 100}"
+        Sleep(100)
         loop 50 {
-            Sleep(200)
+            if stopping_point() {
+                break
+            }
             buy_item()
             Send "{WheelUp}"
             Send "o" ; just incase it zooms in all the way
+            Sleep(200)
         }
         funcran := false
     } else {
