@@ -49,7 +49,7 @@ get_buy() {
     }
     
     if value {
-        MouseMove(foundx, foundy, 0)
+        MouseMove(foundx, foundy, 10)
     }
     return value
 }
@@ -78,6 +78,7 @@ buy_item() {
 }
 
 check_stock() {
+    global funcran
     if check_menu() {
         try {
             ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/scroll.png")
@@ -85,21 +86,23 @@ check_stock() {
         } catch as e {
             return
         }
+        Sleep(100)
         Send "{WheelDown 100}"
         loop 50 {
-            buy_item()
             Sleep(200)
+            buy_item()
             Send "{WheelUp}"
         }
+        funcran := false
     } else {
         ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/seedtp.png")
         if outx {
             MouseClick('L', outx, outy)
-        } else {
+        } else If (outx) {
             ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/seedtp-sel.png")
             MouseClick('L', outx, outy)
         }
-        loop 10 {
+        loop 100 {
             if check_menu() {
                 check_stock
                 return
@@ -109,6 +112,16 @@ check_stock() {
             Sleep(100)
             Send "{Left up}"
         }
+        funcran := false
+    }
+}
+
+funcran := true
+runfunc() {
+    global funcran
+    if (Mod(A_Min, 5) == 0 and not funcran) {
+        funcran := true
+        check_stock()
     }
 }
 
@@ -118,11 +131,21 @@ Running := false
     global Running
     if Running {
         Running := false
-        SetTimer(check_stock, 0)
+        SetTimer(runfunc, 0)
     } else {
         Running := true
+        funcran := true
         check_stock()
-        SetTimer(check_stock, 300000)
+        SetTimer(runfunc, 10000)
+    }
+}
+
+^t:: {
+    ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/rain-weather.png")
+    if outx {
+        MouseMove(outx, outy)
+    } else {
+        MsgBox "False"
     }
 }
 
