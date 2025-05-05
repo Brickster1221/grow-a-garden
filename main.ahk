@@ -58,8 +58,8 @@ get_buy() {
 buy_item() {
     try {
         ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/money.png")
-        MouseMove(outx, outy, 10)
-        MouseMove(outx-2, outy, 10)
+        MouseMove(outx, outy)
+        MouseClick(outx-2, outy)
         Sleep(1000)
         if get_buy() {
             loop 20 {
