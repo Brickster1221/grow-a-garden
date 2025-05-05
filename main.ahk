@@ -81,7 +81,7 @@ buy_item() {
 
 stopping_point() {
     try {
-        ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/apple.png")
+        ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/daffodil.png")
         if outx {
             return true
         }
