@@ -92,6 +92,7 @@ check_stock() {
             Sleep(200)
             buy_item()
             Send "{WheelUp}"
+            Send "o" ; just incase it zooms in all the way
         }
         funcran := false
     } else {
