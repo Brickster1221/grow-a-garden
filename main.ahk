@@ -91,7 +91,10 @@ stopping_point() {
 }
 
 check_stock() {
-    global funcran
+    if !WinExist("Roblox") {
+        MsgBox "Please open roblox!!"
+        return
+    }
     if check_menu() {
         try {
             ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/scroll.png")
@@ -111,7 +114,6 @@ check_stock() {
             Send "o" ; just incase it zooms in all the way
             Sleep(200)
         }
-        funcran := false
     } else {
         ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/seedtp.png")
         if outx {
@@ -130,18 +132,21 @@ check_stock() {
             Sleep(100)
             Send "{Left up}"
         }
-        funcran := false
     }
 }
 
-funcran := true
+funcran := false
 runfunc() {
     global funcran
     if (Mod(A_Min, 5) == 0 and not funcran) {
         funcran := true
         check_stock()
+    } else {
+        funcran := false
     }
 }
+
+SetTimer(UpdateToolTip, 500)
 
 Running := false
 
@@ -152,19 +157,22 @@ Running := false
         SetTimer(runfunc, 0)
     } else {
         Running := true
-        funcran := true
-        check_stock()
+        if not funcran {
+            check_stock()
+        }
         SetTimer(runfunc, 10000)
     }
 }
 
-^t:: {
-    ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/rain-weather.png")
-    if outx {
-        MouseMove(outx, outy)
+UpdateToolTip() {
+    global Running
+    if Running {
+        ToolTip('Running:' Running, 100, A_ScreenHeight / 2)
     } else {
-        MsgBox "False"
+        ToolTip('Running:' Running, 100, A_ScreenHeight / 2)
     }
+    
+    return
 }
 
 ^q:: ExitApp
