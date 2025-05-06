@@ -91,14 +91,23 @@ stopping_point() {
 }
 
 check_stock() {
+    global funcran
+    funcran := true
     if !WinExist("Roblox") {
         MsgBox "Please open roblox!!"
         return
+    } else {
+        try {
+            WinActivate('Roblox')
+        } catch {
+            return
+        } 
     }
     if check_menu() {
         try {
             ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/scroll.png")
             MouseMove(outx, outy)
+            MouseMove(outx-2, outy)
         } catch as e {
             return
         }
@@ -117,10 +126,12 @@ check_stock() {
     } else {
         ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/seedtp.png")
         if outx {
-            MouseClick('L', outx, outy)
+            MouseMove(outx, outy, 10)
+            MouseClick('L', outx-2, outy)
         } else If (outx) {
             ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/seedtp-sel.png")
-            MouseClick('L', outx, outy)
+            MouseMove(outx, outy, 10)
+            MouseClick('L', outx-2, outy)
         }
         loop 100 {
             if check_menu() {
@@ -132,21 +143,23 @@ check_stock() {
             Sleep(100)
             Send "{Left up}"
         }
+        funcran := false
     }
 }
 
 funcran := false
 runfunc() {
     global funcran
-    if (Mod(A_Min, 5) == 0 and not funcran) {
-        funcran := true
-        check_stock()
+    if (Mod(A_Min, 5) == 0) {
+        if not funcran {
+            check_stock()
+        }
     } else {
         funcran := false
     }
 }
 
-SetTimer(UpdateToolTip, 500)
+SetTimer(UpdateToolTip, 1000)
 
 Running := false
 
@@ -164,13 +177,23 @@ Running := false
     }
 }
 
+Runtime := 0
+
 UpdateToolTip() {
     global Running
+    global funcran
+    global Runtime
     if Running {
-        ToolTip('Running:' Running, 100, A_ScreenHeight / 2)
+        Runtime++
+        ToolTip('Macro running', 100, A_ScreenHeight / 2, 2)
+        ToolTip('RunTime: ' Runtime, 100, A_ScreenHeight / 2 - 25, 1)
+        ToolTip(,,,4)
     } else {
-        ToolTip('Running:' Running, 100, A_ScreenHeight / 2)
+        Runtime := 0
+        ToolTip('RunTime: ' Runtime, 100, A_ScreenHeight / 2 - 25, 1)
+        ToolTip('Press `'Ctrl + O`' to start' , 100, A_ScreenHeight / 2, 4)
     }
+    ToolTip('Press `'Ctrl + Q`' to close' , 100, A_ScreenHeight / 2 + 25, 3)
     
     return
 }
