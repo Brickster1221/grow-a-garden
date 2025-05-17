@@ -190,8 +190,8 @@ UpdateToolTip() {
         ToolTip(,,,4)
     } else {
         Runtime := 0
-        ToolTip('RunTime: ' Runtime, 100, A_ScreenHeight / 2 - 25, 1)
-        ToolTip('Press `'Ctrl + O`' to start' , 100, A_ScreenHeight / 2, 4)
+        ToolTip(,,,1)
+        ToolTip('Press `'Ctrl + O`' to start' , 100, A_ScreenHeight / 2, 2)
     }
     ToolTip('Press `'Ctrl + Q`' to close' , 100, A_ScreenHeight / 2 + 25, 3)
     
