@@ -114,6 +114,9 @@ tpseedshop() {
 }
 
 check_stock(gear:=false) {
+    if not checkdisconnect() {
+        return
+    } 
     global funcran
     funcran := true
     if !WinExist("Roblox") {
@@ -155,7 +158,7 @@ check_stock(gear:=false) {
             Sleep(200)
             ToolTip('Scrolling through shop', 100, A_ScreenHeight / 2 - 50, 4)
             loop 50 {
-                if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/daffodil.png") {
+                if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*50 Images/daffodil.png") {
                     ToolTip('Stopped at stopping point', 100, A_ScreenHeight / 2 - 50, 4)
                     break
                 }
@@ -211,6 +214,27 @@ check_stock(gear:=false) {
             Send "{Left up}"
         }
         funcran := false
+    }
+}
+
+checkdisconnect() {
+    ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/something.png")
+    if !outx {
+        ToolTip('You disconnected, trying to reconnect', 100, A_ScreenHeight / 2 - 50, 4)
+        ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*50 Images/reconnect.png")
+        if outx {
+            MouseMove(outx,outy)
+            MouseMove(outx-2,outy)
+            MouseClick()
+            ToolTip('pressed reconnect button', 100, A_ScreenHeight / 2 - 50, 4)
+            Sleep(20000)
+            MouseClick()
+            return true
+        } else {
+            return false
+        }
+    } else {
+        return true
     }
 }
 
