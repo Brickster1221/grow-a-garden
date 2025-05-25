@@ -119,16 +119,11 @@ check_stock(gear:=false) {
     } 
     global funcran
     funcran := true
-    if !WinExist("Roblox") {
-        MsgBox "Please open roblox!!"
+    try {
+        WinActivate('Roblox')
+    } catch {
         return
-    } else {
-        try {
-            WinActivate('Roblox')
-        } catch {
-            return
-        } 
-    }
+    } 
     if check_menu() {
         if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/scroll.png") {
             MouseMove(outx, outy)
@@ -218,6 +213,9 @@ check_stock(gear:=false) {
 }
 
 checkdisconnect() {
+    try {
+        WinActivate('Roblox')
+    }
     ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/something.png")
     if !outx {
         ToolTip('You disconnected, trying to reconnect', 100, A_ScreenHeight / 2 - 50, 4)
@@ -230,9 +228,10 @@ checkdisconnect() {
             Sleep(20000)
             MouseClick()
             return true
-        } else {
-            return false
+        } else if !WinExist("Roblox") {
+            MsgBox "Please open roblox!!, im too lazy to make it reconnect rn"
         }
+        return false
     } else {
         return true
     }
