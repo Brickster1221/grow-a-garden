@@ -7,7 +7,7 @@ check_menu(close:=false) { ;checks if the menu is open
     local value := false
     local foundx := 0
     local foundy := 0
-    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/x.png") {
+    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*50 aImages/x.png") {
         foundx := outx
         foundy := outy
         value := true
@@ -92,9 +92,8 @@ check_stock() {
     } catch {
         return
     }
-    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*10 Images/backpack.png") {
-        MouseMove(outx, outy)
-        MouseClick('L',outx+2, outy)
+    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*80 Images/backpack.png") {
+        Send('``')
     }    
     global in_eventshop
     if check_menu() {
@@ -220,13 +219,15 @@ funcran := false
 runfunc() {
     global funcran
     if in_eventshop and not funcran {
+        ToolTip('doing honey machine', 100, A_ScreenHeight / 2 - 50, 4)
         search('polli')
         Sleep(100)
         if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*30 Images/event/pollinated.png") {
             MouseMove(outx,outy)
             Send 'e' ; gets honey
-            Sleep(100)
+            Sleep(1000)
             Send 'e' ; just in case a fruit is already selected
+            Sleep(100)
             MouseClick('L',outx+2,outy)
             Sleep(100)
             Send 'e' ; if it wasnt selected
@@ -236,7 +237,7 @@ runfunc() {
         check_stock()
     } if (Mod(A_Min, 5) == 0) and not funcran and not in_eventshop {
         check_stock()
-    } else {
+    } else if not (Mod(A_Min, 5) == 0) {
         funcran := false
         ToolTip('Waiting for restock', 100, A_ScreenHeight / 2 - 50, 4)
     }
@@ -284,6 +285,10 @@ UpdateToolTip() {
     return
 }
 
-^t:: search('pol')
+^t:: {
+    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*80 Images/backpack.png") {
+        Send('``')
+    }  
+}
 
 q:: ExitApp
