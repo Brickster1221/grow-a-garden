@@ -7,7 +7,7 @@ check_menu(close:=false) { ;checks if the menu is open
     local value := false
     local foundx := 0
     local foundy := 0
-    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*50 aImages/x.png") {
+    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*50 Images/x.png") {
         foundx := outx
         foundy := outy
         value := true
