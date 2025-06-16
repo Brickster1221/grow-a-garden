@@ -7,7 +7,7 @@ check_menu(close:=false) { ;checks if the menu is open
     local value := false
     local foundx := 0
     local foundy := 0
-    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*50 Images/x.png") {
+    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*2 Images/x.png") {
         foundx := outx
         foundy := outy
         value := true
@@ -104,11 +104,12 @@ check_stock() {
         ToolTip('Scrolling to top', 100, A_ScreenHeight / 2 - 50, 4)
         Sleep(10)
         Send "{WheelUp 100}"
-        Sleep(200)          
+        Sleep(300)          
         if in_eventshop {
             if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/event/pack.png") { ; finds the seed pack
                 MouseMove(outx, outy)
                 MouseClick('L',outx+2, outy)
+                Sleep(100)
                 buy_item(true)
             }
             ToolTip('Scrolling through shop', 100, A_ScreenHeight / 2 - 50, 4)
@@ -116,7 +117,9 @@ check_stock() {
                 if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "Images/event/egg.png") { ; finds the seed pack
                     MouseMove(outx, outy)
                     MouseClick('L',outx+2, outy)
+                    Sleep(100)
                     buy_item(true)
+                    ToolTip('bought all the things', 100, A_ScreenHeight / 2 - 50, 4)
                     return
                 }
                 Send "{WheelDown}"
@@ -138,7 +141,7 @@ check_stock() {
         if in_eventshop { ;checks to see if the shop is even open
             ToolTip('checking for shop', 100, A_ScreenHeight / 2 - 50, 4)
             loop {
-                if A_Index == 5 {
+                if A_Index == 10 {
                     ToolTip('shop not found, doing default procedure', 100, A_ScreenHeight / 2 - 50, 4)
                     in_eventshop := false
                     break
@@ -146,7 +149,7 @@ check_stock() {
                 if check_menu() {
                     break
                 }
-                Sleep(500)
+                Sleep(1000)
             }
             check_stock
             return
@@ -233,7 +236,7 @@ runfunc() {
             Send 'e' ; if it wasnt selected
         }
     }
-    if in_eventshop and not funcran and (Mod(A_Min, 30) == 0) {
+    if in_eventshop and not funcran and (Mod(A_Min, 15) == 0) {
         check_stock()
     } if (Mod(A_Min, 5) == 0) and not funcran and not in_eventshop {
         check_stock()
@@ -285,10 +288,6 @@ UpdateToolTip() {
     return
 }
 
-^t:: {
-    if ImageSearch(&outx, &outy, 0, 0, A_ScreenWidth, A_ScreenHeight, "*80 Images/backpack.png") {
-        Send('``')
-    }  
-}
+^t:: check_menu(true)
 
 q:: ExitApp
